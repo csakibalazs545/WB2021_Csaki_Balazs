@@ -1,0 +1,15 @@
+Ez az oldal az SQL Serverben gyakran használt rendszerfüggvényeket mutatja be, amelyek objektumokat, értékeket és beállításokat adnak vissza az SQL Serverben:
+
+CAST – Egyik típusból egy másik érték konvertálása.
+KONVERTÁLÁS – Egyik típusból származó értéket egy másikba konvertál.
+VÁLASZTÁS – Az első argumentum eredménye alapján a két érték egyikét adja vissza.
+ISNULL – Cserélje le a NULL értéket egy megadott értékre.
+ISNUMERIC – Ellenőrzi, hogy egy kifejezés érvényes numerikus típusú-e.
+IIF – if-else logika hozzáadása egy lekérdezéshez.
+TRY_CAST – Egyik típusból egy másik értéket konvertál, és NULL értéket ad vissza, ha a konvertálás sikertelen.
+TRY_CONVERT – Egy adott típusú értéket egy másik típusba konvertál, és visszaadja a megadott típusba fordítandó értéket. NULL értéket ad vissza, ha az átalakítás sikertelen.
+TRY_PARSE – Karakterláncot dátum/idő vagy számmá alakít, és NULL értéket ad vissza, ha a konvertálás sikertelen.
+Dátum/idő konvertálása karakterlánccá – Megmutatja, hogyan konvertálhat egy dátum/idő értéket karakterlánccá egy megadott formátumban.
+Karakterlánc konvertálása dátum/idő értékké – Írja le, hogyan lehet egy karakterláncot dátum/idő értékké konvertálni.
+Dátum/idő konvertálása dátummá – Dátum/idő konvertálása dátummá.
+GENERATE_SERIES() – Számsorozatot generál egy adott tartományon belül.

@@ -1,0 +1,20 @@
+Tárolt eljárás törléséhez az DROP PROCEDUREor DROP PROCutasítást kell használni:
+
+DROP PROCEDURE sp_name;
+
+vagy
+
+DROP PROC sp_name;    
+
+
+ahol sp_namea törölni kívánt tárolt eljárás neve.
+
+
+
+Például a uspProductListtárolt eljárás eltávolításához a következő utasítást kell végrehajtani:
+
+DROP PROCEDURE uspProductList;
+
+
+
+Ebben az oktatóanyagban megtanulta, hogyan kezelheti az SQL Server tárolt eljárásait, beleértve a tárolt eljárások létrehozását, végrehajtását, módosítását és törlését.

@@ -1,0 +1,14 @@
+A SZÓRÁS függvény példája
+A következő utasítás a STDEV()függvényt használja az összes listaár statisztikai szórásának kiszámítására:
+
+SELECT
+    CAST(ROUND(STDEV(list_price),2) as DEC(10,2)) stdev_list_price
+FROM
+    production.products;
+
+
+Kimenet:
+
+stdev_list_price
+----------------
+1612.15

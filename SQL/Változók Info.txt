@@ -1,0 +1,8 @@
+Mi az a változó?
+A változó egy olyan objektum, amely egyetlen, adott típusú értéket tartalmaz, például egész szám , dátum vagy változó karakterlánc .
+
+Általában a következő esetekben használunk változókat:
+
+Ciklusszámlálóként, amely megszámolja, hogy egy ciklus hányszor fut le.
+Egy érték tárolására, amelyet egy folyamatirányítási utasítás, például a tesztelni kíván WHILE.
+Tárolt eljárás vagy függvény által visszaadott érték tárolása

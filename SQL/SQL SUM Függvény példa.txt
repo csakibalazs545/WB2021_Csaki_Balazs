@@ -1,0 +1,21 @@
+A SZUM függvény példája
+A függvény bemutatásához a minta adatbázisból SUM() származó táblázatot fogjuk használni .stocks
+
+
+A következő utasítás a SUM()függvényt használja az összes raktár teljes készletének kiszámítására termékazonosító szerint:
+
+SELECT 
+    product_id, 
+    SUM(quantity) stock_count
+FROM 
+    production.stocks
+GROUP BY
+    product_id
+ORDER BY 
+    stock_count DESC;
+
+
+Hogyan működik az állítás:
+
+Először is, a GROUP BYzáradék termékazonosító szerint csoportokba foglalta a sorokat.
+Másodszor, a SUM()függvény kiszámította az egyes csoportok mennyiségének összegét.

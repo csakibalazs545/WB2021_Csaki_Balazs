@@ -1,0 +1,10 @@
+Tárolt eljárás létrehozása egy paraméterrel
+A következő lekérdezés egy terméklistát ad vissza a minta adatbázisproducts táblájából :
+
+SELECT
+    product_name,
+    list_price
+FROM 
+    production.products
+ORDER BY
+    list_price;

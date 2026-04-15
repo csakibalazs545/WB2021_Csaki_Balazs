@@ -1,0 +1,14 @@
+A MAX függvényre példa
+A következő utasítás a MAX() függvényt használja az összes termék legmagasabb listaárának visszaadására:
+
+SELECT
+    MAX(list_price) max_list_price
+FROM
+    production.products;
+
+
+Kimenet:
+
+max_list_price
+--------------
+11999.99

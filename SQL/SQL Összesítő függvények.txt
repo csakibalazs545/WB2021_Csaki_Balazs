@@ -1,0 +1,24 @@
+Összefoglalás : ebben az oktatóanyagban megismerkedhetsz az SQL Server összesítő függvényeivel és azzal, hogyan használhatod őket összesítések kiszámításához.
+
+Egy aggregált függvény értékhalmazon dolgozik, és egyetlen értéket ad vissza. A gyakorlatban gyakran használunk aggregált függvényeket a GROUP BYés HAVINGzáradékkal csoportokon belüli értékek összesítésére.
+
+Az alábbi táblázat a leggyakrabban használt SQL Server összesítő függvényeket mutatja be:
+
+Írjon be egy függvénynevet a kereséshez...
+Összesített függvény	Leírás
+ÁTLAG	Számítsa ki egy értékkészlet nem NULL értékeinek átlagát.
+ELLENŐRZŐÖSSZEG_AGG	Számítson ki egy ellenőrzőösszeg-értéket egy sorcsoport alapján.
+SZÁM	Adja vissza egy csoport azon sorainak számát, amelyek eleget tesznek egy feltételnek.
+DARAB(*)	Adja vissza egy táblázat azon sorainak számát, amelyek megfelelnek egy adott feltételnek.
+DARAB(KÜLÖNBÖZŐ)	Adja vissza egy adott feltételnek megfelelő oszlopban található egyedi értékek számát.
+SZÁMOLÁS, HA	Megmutatja, hogyan használható a COUNTfüggvény a IIFfüggvénnyel egy olyan függvény létrehozásához, COUNT IFamely egy feltétel alapján visszaadja az értékek teljes számát.
+COUNT_BIG	A COUNT_BIG()függvény visszaadja egy csoport sorainak számát (BIGINT adattípussal), beleértve a NULL értékű sorokat is.
+MAX	A nem NULL értékek halmazának legmagasabb (maximum) értékét adja vissza.
+MIN	A nem NULL értékek halmazának legalacsonyabb (minimum) értékét adja vissza.
+SZÓRÁS	Számítsa ki egy értékkészlet mintavételi szórását.
+SZÓRÁS	Egy értékhalmaz populációs szórását adja vissza.
+ÖSSZEG	Egy halmaz összes nem NULL értékének összegzését adja vissza.
+SZUMMA HA	Használd a SUMfüggvényt a IIFfüggvénnyel együtt egy olyan függvény létrehozásához, SUM IFamely egy feltétel alapján visszaadja az értékek összegét.
+STRING_AGG 	Karakterláncok összefűzése megadott elválasztóval
+VAR	Egy értékkészlet mintavételi varianciáját adja vissza.
+VARP	Adja vissza egy értékkészlet populációs varianciáját.

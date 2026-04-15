@@ -1,0 +1,14 @@
+A MIN függvényre példa
+Hasonlóképpen, a következő utasítás a MIN() függvényt használja az összes termék legalacsonyabb listaárának visszaadására:
+
+SELECT
+    MIN(list_price) min_list_price
+FROM
+    production.products;     
+
+
+Kimenet:
+
+min_list_price
+--------------
+89.99

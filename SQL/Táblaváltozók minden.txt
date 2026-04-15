@@ -1,0 +1,55 @@
+A táblaváltozók olyan változók, amelyek lehetővé teszik adatsorok tárolását, hasonlóan az ideiglenes táblákhoz .
+
+Hogyan deklaráljunk táblaváltozókat
+Egy táblaváltozó deklarálásához a DECLAREkövetkező utasítást kell használni:
+
+DECLARE @table_variable_name TABLE (
+    column_list
+);
+
+
+
+Ebben a szintaxisban a táblaváltozó nevét az DECLARE és a TABLE kulcsszavak között adjuk meg. A táblaváltozók nevének a @szimbólummal kell kezdődnie.
+
+A kulcsszó után TABLE definiálod a táblaváltozó szerkezetét, amely hasonló egy normál tábla szerkezetéhez, beleértve az oszlopdefiníciókat, az adattípust, a méretet, az opcionális megszorításokat stb.
+
+A táblaváltozók hatóköre
+A lokális változókhoz hasonlóan a táblaváltozók a köteg végén kikerülnek a hatókörből.
+
+Ha egy tárolt eljárásban vagy felhasználó által definiált függvényben definiál egy táblaváltozót , a táblaváltozó a tárolt eljárás vagy a felhasználó által definiált függvény kilépése után már nem létezik.
+
+
+
+Táblázatváltozó példa
+Például a következő utasítás egy nevű táblaváltozót deklarál, @product_tableamely három oszlopból áll: product_name, brand_id, és list_price:
+
+DECLARE @product_table TABLE (
+    product_name VARCHAR(MAX) NOT NULL,
+    brand_id INT NOT NULL,
+    list_price DEC(11,2) NOT NULL
+);
+
+
+
+Adatok beszúrása a táblaváltozókba
+Deklarálás után a táblaváltozó üres. Sorokat a táblaváltozókba a INSERTkövetkező utasítással szúrhatunk be:
+
+INSERT INTO @product_table
+SELECT
+    product_name,
+    brand_id,
+    list_price
+FROM
+    production.products
+WHERE
+    category_id = 1;
+
+
+Adatok lekérdezése a táblaváltozókból
+Egy ideiglenes táblához hasonlóan a táblaváltozókból is lekérdezhet adatokat a SELECTkövetkező utasítással:
+
+SELECT
+    *
+FROM
+    @product_table;
+

@@ -1,0 +1,6 @@
+Az SQL Server triggerek speciális tárolt eljárások , amelyek automatikusan végrehajtódnak az adatbázis-objektum, az adatbázis és a szerver eseményeire válaszul. Az SQL Server háromféle triggert kínál:
+
+Adatmanipulációs nyelvi (DML) triggerek, amelyek automatikusan meghívódnak a táblákon végrehajtott INSERT, UPDATEés DELETEeseményekre válaszul.
+CREATEAz adatdefiníciós nyelv (DDL) triggerei a , ALTERés utasításokra válaszul aktiválódnak DROP. A DDL triggerek bizonyos, DDL-szerű műveleteket végrehajtó, rendszerben tárolt eljárásokra is reagálnak.
+LOGONBejelentkezési triggerek, amelyek eseményekre reagálva aktiválódnak
+Ebben a részben megtudhatja, hogyan használhatja hatékonyan a triggereket az SQL Serverben.
