@@ -1,0 +1,376 @@
+
+1. KÖRNYEZET ELŐKÉSZÍTÉSE ÉS A LARAVEL TELEPÍTÉSE
+
+Mielőtt bármit csinálnál, a gépedre telepíteni kell a fejlesztői környezetet.
+
+Szükséges szoftverek (Előfeltételek):
+
+• XAMPP : Ez biztosítja a PHP nyelvet és a MySQL adatbázis-kezelőt a gépeden.
+• Composer: A PHP nyelv csomagkezelője (olyan, mint a Node.js-nél az npm). Ezzel töltjük le magát a Laravelt.
+
+A projekt letöltése és létrehozása lépésről lépésre:
+
+1. Nyiss meg egy parancssort (CMD vagy Terminal) abban a mappában, ahova a backendet szeretnéd tenni.
+2. Futtasd a következő parancsot egy új Laravel projekt létrehozásához (a példában a projekt neve termek-backend lesz):bash
+composer create-project laravel/laravel termek-backend
+
+3. Lépj be a frissen létrehozott projekt mappájába:bash
+cd termek-backend
+
+
+Az API képesség engedélyezése (Laravel 11+ sajátosság):
+
+A Laravel 11-es verziójától kezdve a projekt alapértelmezetten nagyon letisztult, és az API útvonalak nincsenek előre konfigurálva. Ahhoz, hogy létrejöjjön az api.php útvonalfájl, futtasd ezt a parancsot a projekt mappáján belül:
+bash
+php artisan install:api
+
+Ez a parancs létrehozza a routes/api.php fájlt, és felkészíti a keretrendszert az API kérések fogadására.
+
+Az Adatbázis létrehozása és összekötése:
+
+1. Indítsd el a XAMPP panelt, és indítsd el az Apache és MySQL modulokat.
+2. Nyisd meg a böngésződben a http://localhost/phpmyadmin oldalt.
+3. Hozz létre egy új adatbázist (sémát) tetszőleges névvel, például: laravel_termekek.
+4. Nyisd meg a Laravel projektgyökérben található .env nevű konfigurációs fájlt egy kódszerkesztőben, és keresd meg az adatbázisra vonatkozó sorokat. Módosítsd őket a saját adataidra:env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=laravel_termekek
+DB_USERNAME=root
+DB_PASSWORD=
+
+(XAMPP esetén az alapértelmezett felhasználónév a root, a jelszó pedig üresen hagyandó).
+
+A Backend szerver futtatása:
+
+A backendet az alábbi parancs beírásával tudod elindítani:
+bash
+php artisan serve
+
+A parancs hatására a szerver elindul, és kiír egy címet (alapértelmezetten: http://127.0.0.1:8000). Ezt a parancssort nem szabad bezárni, amíg a frontendeddel kommunikálni akarsz!
+
+2. A MODELLEK (MODELS) ÉS SZEREPÜK A BACKENDBEN
+
+
+Mire jó a Modell?
+
+A Laravel az Eloquent ORM (Object-Relational Mapping) rendszert használja. Ez azt jelenti, hogy az adatbázis tábláit nem nyers SQL lekérdezésekkel (SELECT * FROM...) kezeljük, hanem PHP osztályokon (Modelleken) keresztül.
+Minden egyes adatbázis-táblának van egy megfelelő Modell fájlja. Ha a tábla neve termeks (többes szám), akkor a Modell neve Termek (egyes szám) lesz. A modellen keresztül tudunk új adatot menteni, törölni vagy lekérdezni.
+
+Modell és Migráció együttes létrehozása:
+
+A leggyorsabb és legbiztonságosabb módszer, ha a Modellt és a hozzá tartozó adatbázis-módosító fájlt (migrációt) egyszerre hozzuk létre az -m flag segítségével:
+bash
+php artisan make:model Termek -m
+Körültekintően használja a kódot.
+Ez a parancs két fontos fájlt hoz létre:
+1. app/Models/Termek.php (A Modell osztály)
+2. database/migrations/xxxx_xx_xx_xxxxxx_create_termeks_table.php (A táblastruktúra fájl)
+
+Hogyan nézzen ki a Modell? (app/Models/Termek.php)
+
+Nyisd meg a fájlt, és egészítsd ki az alábbiak szerint:
+php
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Termek extends Model
+{
+    use HasFactory;
+
+    // 1. MEGHATÁROZÁS: Melyik táblára mutat ez a modell (opcionális, de biztonságos megadni)
+    protected $table = 'termeks';
+
+    // 2. TÖMEGES ADATMÓDOSÍTÁS VÉDELME ($fillable)
+    // Csak az itt felsorolt mezőket engedi a Laravel egyszerre elmenteni (pl. Requestből).
+    // Ez egy biztonsági pajzs az ellen, hogy a felhasználó ne tudjon olyan mezőt módosítani (pl. is_admin), amit nem szabadna.
+    protected $fillable = [
+        'nev',
+        'kod',
+        'ar',
+        'kategoria',
+        'kepUrl',
+        'elerheto'
+    ];
+
+    // 3. ADATTÍPUS KONVERZIÓ ($casts)
+    // Az adatbázisban a boolean (logikai) érték 0 vagy 1-ként tárolódik.
+    // A $casts tömb biztosítja, hogy amikor a Laravel lekéri az adatot, automatikusan valódi true/false értékké alakítsa a Vue frontend számára.
+    protected $casts = [
+        'elerheto' => 'boolean',
+        'ar' => 'integer',
+    ];
+}
+
+
+3. A MIGRÁCIÓK (MIGRATIONS) MÉLYREHATÓ ELEMZÉSE
+
+
+Mire jó a Migráció?
+
+A migrációkat úgy kell elképzelni, mint az adatbázis verziókezelőjét (mint a Git, csak táblákra). Nem a phpMyAdmin felületén kattintgatva hozzuk létre a táblákat, hanem kódban írjuk meg. Így ha a projektedet átviszed egy másik gépre, egyetlen paranccsal pontosan ugyanazt az adatbázis-struktúrát tudod felépíteni.
+
+A táblastruktúra megírása:
+
+Keresd meg a database/migrations/ mappában a _create_termeks_table.php végű fájlt, és alakítsd át az up() metódusát:
+php
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * A migráció futtatásakor végrehajtódó logika (Tábla létrehozás).
+     */
+    public function up(): void
+    {
+        Schema::create('termeks', function (Blueprint $table) {
+            $table->id(); // Automatikusan növekvő elsődleges kulcs (id)
+            
+            // Adattípusok és módosítók részletesen:
+            $table->string('nev'); // Rövid szöveges mező (VARCHAR) a termék nevének
+            
+            $table->string('kod')->unique(); 
+            // A ->unique() módosító garantálja, hogy ne lehessen két ugyanolyan kódú termék az adatbázisban.
+
+            $table->integer('ar'); // Egész szám típus az ár tárolására
+            
+            $table->string('kategoria'); // Szöveges mező a kategóriának
+            
+            $table->string('kepUrl')->nullable(); 
+            // A ->nullable() azt jelenti, hogy a mező értéke lehet üres (NULL) is, nem kötelező megadni kép linket.
+            
+            $table->boolean('elerheto')->default(true); 
+            // Logikai mező (0 vagy 1), ami alapértelmezetten (default) true (raktáron van), ha nem adunk meg mást.
+
+            $table->timestamps(); // Létrehoz két mezőt: created_at (létrehozva ekkor) és updated_at (módosítva ekkor)
+        });
+    }
+
+    /**
+     * A migráció visszavonásakor végrehajtódó logika (Tábla törlés).
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('termeks');
+    }
+};
+
+
+Elérhető összes Migrációs parancs a parancssorban:
+
+• php artisan migrate
+	• Mit csinál: Lefuttatja az összes olyan új migrációs fájlt, ami még nem szerepel az adatbázisban. Létrehozza a táblákat.
+• php artisan migrate:rollback
+	• Mit csinál: Visszavonja a legutolsó migrációs lépést (futtatja a down() metódust). Kitörli a legutóbb létrehozott táblákat.
+• php artisan migrate:refresh
+	• Mit csinál: Sorban visszaforgatja az összes eddigi migrációt (letörli a táblákat), majd teljesen elölről újra lefuttatja őket. Figyelem: Minden eddigi tesztadat elveszik a táblákból!
+• php artisan migrate:fresh
+	• Mit csinál: Nem egyesével vonja vissza a táblákat, hanem kíméletlenül lemarja az összes létező táblát az adatbázisból, majd tisztán lefuttatja a migrate parancsot. Fejlesztés közben a leggyakrabban használt parancs, ha elrontottál egy mezőt.
+
+4. AZ API ÚTVONALAK (ROUTES) ÉS VÉGPONTOK EXKLUZÍV ELEMZÉSE
+
+
+Hol kezeljük az API útvonalakat?
+
+Minden olyan útvonalat, amit a Vue frontendről akarunk meghívni (Axios-szal), a routes/api.php fájlban kell regisztrálni. A Laravel automatikusan elé fűzi az /api/ előtagot ezekhez az útvonalakhoz. Tehát ha beírod, hogy /termekek, az a valóságban http://localhost:8000/api/termekek lesz.
+
+Az útvonalfájl beállítása (routes/api.php):
+
+Nyisd meg a fájlt:
+A) Manuális módszer (A végpontok megértéséhez):
+php
+use App\Http\Controllers\TermekController;
+use Illuminate\Support\Facades\Route;
+
+Route::get('/termekek', [TermekController::class, 'index']);      // Összes lekérése
+Route::post('/termekek', [TermekController::class, 'store']);     // Új létrehozása
+Route::get('/termekek/{id}', [TermekController::class, 'show']);  // Egy konkrét lekérése
+Route::put('/termekek/{id}', [TermekController::class, 'update']); // Módosítás
+Route::delete('/termekek/{id}', [TermekController::class, 'destroy']); // Törlés
+Körültekintően használja a kódot.
+B) Professzionális, rövidített módszer (Ajánlott):
+A fenti 5 sort a Laravel képes egyetlen sorba sűríteni a beépített RESTful konvenciók alapján:
+php
+Route::apiResource('termekek', TermekController::class);
+
+Végpontok részletes adatáramlási táblázata:
+
+
+HTTP Metódus	Teljes URL Végpont	Controller Funkció	Mi történik az adattal?	Vue Frontend megfelelője
+GET	/api/termekek	index	Lekéri az összes terméket az adatbázisból JSON formátumban.	axios.get('.../api/termekek')
+POST	/api/termekek	store	Új terméket küld be a frontend, amit a backend validál és elment.	axios.post('.../api/termekek', ujAdat)
+GET	/api/termekek/{id}	show	Visszaadja egyetlen konkrét, ID alapján kiválasztott termék adatait.	axios.get('.../api/termekek/5')
+PUT	/api/termekek/{id}	update	Módosítja a megadott ID-jú termék adatait a küldött új értékekkel.	axios.put('.../api/termekek/5', modositottAdat)
+DELETE	/api/termekek/{id}	destroy	Véglegesen kitörli a megadott ID-val rendelkező terméket az adatbázisból.	axios.delete('.../api/termekek/5')
+
+
+5. A CONTROLLER ARCHITEKTÚRA ÉS A CRUD LOGIKA
+
+
+Mire jó a Controller?
+
+A Controller (Vezérlő) a backend agya. Az útvonal (Route) csak átirányítja a kérést ide, a Controller feladata pedig az, hogy:
+1. Fogadja a frontendről érkező adatokat ($request).
+2. Ellenőrizze, hogy az adatok megfelelőek-e (Validáció).
+3. Utasítsa a Modellt, hogy végezze el a műveletet az adatbázisban.
+4. Küldjön vissza egy tiszta JSON választ és egy HTTP státuszkódot a frontendnek.
+
+A Controller létrehozása parancssorból:
+
+Futtasd az alábbi parancsot, ami automatikusan legenerálja az összes üres CRUD metódust (index, store, show, update, destroy):
+bash
+php artisan make:controller TermekController --api
+
+Controller kód (app/Http/Controllers/TermekController.php):
+
+
+php
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Termek;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+
+class TermekController extends Controller
+{
+    /**
+     * GET /api/termekek
+     * Összes termék kilistázása.
+     */
+    public function index()
+    {
+        // Az Eloquent ORM segítségével lekérjük az összes rekordot a 'termeks' táblából
+        $termekek = Termek::all();
+
+        // Visszaküldjük JSON formátumban, 200-as OK státuszkóddal
+        return response()->json($termekek, 200);
+    }
+
+    /**
+     * POST /api/termekek
+     * Új termék létrehozása SZIGORÚ VALIDÁCIÓVAL.
+     */
+    public function store(Request $request)
+    {
+        // 1. SZABÁLYOK MEGHATÁROZÁSA: Mit várunk el a frontendtől?
+        $validator = Validator::make($request->all(), [
+            'nev' => 'required|string|max:255', // Kötelező, szöveg, max 255 karakter
+            'kod' => 'required|string|unique:termeks,kod', // Kötelező, és egyedinek kell lennie a 'termeks' tábla 'kod' oszlopában!
+            'ar' => 'required|integer|min:0', // Kötelező, egész szám, nem lehet negatív
+            'kategoria' => 'required|string', // Kötelező szöveg
+            'kepUrl' => 'nullable|string', // Nem kötelező mező
+            'elerheto' => 'boolean' // Ha jön érték, annak true/false-nak kell lennie
+        ]);
+
+        // 2. VALIDÁCIÓ ELLENŐRZÉSE: Ha elbukott az ellenőrzés
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Hibás adatok lettek megadva!',
+                'errors' => $validator->errors() // Visszaadja pontosan, melyik mező miért hibás
+            ], 422); // 422 Unprocessable Entity: Validációs hiba kódja
+        }
+
+        // 3. ADATMENTÉS: Ha minden adat szabályos, a Modell segítségével elmentjük
+        // A Termek::create módszer csak azokat menti el, amik benne vannak a Modell $fillable tömbjében!
+        $ujTermek = Termek::create($request->all());
+
+        // Visszaküldjük a létrejött objektumot
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Termék sikeresen létrehozva!',
+            'data' => $ujTermek
+        ], 201); // 201 Created: Sikeres erőforrás-létrehozás kódja
+    }
+
+    /**
+     * GET /api/termekek/{id}
+     * Egy konkrét termék részleteinek megtekintése HIBAKEZELÉSSEL.
+     */
+    public function show($id)
+    {
+        // Megkeressük az elemet ID alapján
+        $termek = Termek::find($id);
+
+        // Ha nem létezik a termék (üres a változó)
+        if (!$termek) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'A keresett termék nem található!'
+            ], 404); // 404 Not Found: Nem található hiba kódja
+        }
+
+        return response()->json($termek, 200);
+    }
+
+    /**
+     * PUT /api/termekek/{id}
+     * Létező termék adatainak frissítése.
+     */
+    public function update(Request $request, $id)
+    {
+        $termek = Termek::find($id);
+
+        if (!$termek) {
+            return response()->json(['message' => 'Termék nem található!'], 404);
+        }
+
+        // Validáció frissítéskor (A kód egyediségénél ki kell zárni a jelenlegi terméket, hogy saját magával ne ütközzön)
+        $validator = Validator::make($request->all(), [
+            'nev' => 'sometimes|required|string|max:255',
+            'kod' => 'sometimes|required|string|unique:termeks,kod,' . $id,
+            'ar' => 'sometimes|required|integer|min:0',
+            'kategoria' => 'sometimes|required|string',
+            'kepUrl' => 'nullable|string',
+            'elerheto' => 'boolean'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        // Frissítjük a rekordot a beérkező adatokkal
+        $termek->update($request->all());
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Termék sikeresen módosítva!',
+            'data' => $termek
+        ], 200);
+    }
+
+    /**
+     * DELETE /api/termekek/{id}
+     * Termék végleges törlése az adatbázisból.
+     */
+    public function destroy($id)
+    {
+        $termek = Termek::find($id);
+
+        if (!$termek) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'A törölni kívánt termék már nem létezik!'
+            ], 404);
+        }
+
+        // Töröljük a rekordot
+        $termek->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Termék sikeresen eltávolítva az adatbázisból!'
+        ], 200);
+    }
+}
+

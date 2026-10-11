@@ -1,0 +1,14 @@
+C:\Users\boban\Desktop\teszt csharp\Realestate\Realestate\bin\Debug\Realestate.exe.config
+C:\Users\boban\Desktop\teszt csharp\Realestate\Realestate\bin\Debug\Realestate.exe
+C:\Users\boban\Desktop\teszt csharp\Realestate\Realestate\bin\Debug\Realestate.pdb
+C:\Users\boban\Desktop\teszt csharp\Realestate\Realestate\obj\Debug\Realestate.csproj.AssemblyReference.cache
+C:\Users\boban\Desktop\teszt csharp\Realestate\Realestate\obj\Debug\Realestate.csproj.CoreCompileInputs.cache
+C:\Users\boban\Desktop\teszt csharp\Realestate\Realestate\obj\Debug\Realestate.exe
+C:\Users\boban\Desktop\teszt csharp\Realestate\Realestate\obj\Debug\Realestate.pdb
+C:\Users\boban\Documents\GitHub\WB2021_BobanPetrikJozsef\C#\teszt csharp\Realestate\Realestate\bin\Debug\Realestate.exe.config
+C:\Users\boban\Documents\GitHub\WB2021_BobanPetrikJozsef\C#\teszt csharp\Realestate\Realestate\bin\Debug\Realestate.exe
+C:\Users\boban\Documents\GitHub\WB2021_BobanPetrikJozsef\C#\teszt csharp\Realestate\Realestate\bin\Debug\Realestate.pdb
+C:\Users\boban\Documents\GitHub\WB2021_BobanPetrikJozsef\C#\teszt csharp\Realestate\Realestate\obj\Debug\Realestate.csproj.AssemblyReference.cache
+C:\Users\boban\Documents\GitHub\WB2021_BobanPetrikJozsef\C#\teszt csharp\Realestate\Realestate\obj\Debug\Realestate.csproj.CoreCompileInputs.cache
+C:\Users\boban\Documents\GitHub\WB2021_BobanPetrikJozsef\C#\teszt csharp\Realestate\Realestate\obj\Debug\Realestate.exe
+C:\Users\boban\Documents\GitHub\WB2021_BobanPetrikJozsef\C#\teszt csharp\Realestate\Realestate\obj\Debug\Realestate.pdb

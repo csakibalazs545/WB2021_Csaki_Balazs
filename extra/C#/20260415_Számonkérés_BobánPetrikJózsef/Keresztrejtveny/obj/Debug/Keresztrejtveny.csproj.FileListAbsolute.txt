@@ -1,0 +1,8 @@
+C:\Users\bobanpetrik\Desktop\20260415_Számonkérés_BobánPetrikJózsef\Keresztrejtveny\bin\Debug\Keresztrejtveny.exe.config
+C:\Users\bobanpetrik\Desktop\20260415_Számonkérés_BobánPetrikJózsef\Keresztrejtveny\bin\Debug\Keresztrejtveny.exe
+C:\Users\bobanpetrik\Desktop\20260415_Számonkérés_BobánPetrikJózsef\Keresztrejtveny\bin\Debug\Keresztrejtveny.pdb
+C:\Users\bobanpetrik\Desktop\20260415_Számonkérés_BobánPetrikJózsef\Keresztrejtveny\obj\Debug\Keresztrejtveny.csproj.AssemblyReference.cache
+C:\Users\bobanpetrik\Desktop\20260415_Számonkérés_BobánPetrikJózsef\Keresztrejtveny\obj\Debug\Keresztrejtveny.csproj.CoreCompileInputs.cache
+C:\Users\bobanpetrik\Desktop\20260415_Számonkérés_BobánPetrikJózsef\Keresztrejtveny\obj\Debug\Keresztrejtveny.exe
+C:\Users\bobanpetrik\Desktop\20260415_Számonkérés_BobánPetrikJózsef\Keresztrejtveny\obj\Debug\Keresztrejtveny.pdb
+C:\Users\bobanpetrik\Desktop\20260415_Számonkérés_BobánPetrikJózsef\Keresztrejtveny\obj\Debug\Keresztrejtveny.exe.config

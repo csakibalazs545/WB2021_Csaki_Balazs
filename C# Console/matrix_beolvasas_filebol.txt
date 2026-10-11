@@ -1,0 +1,38 @@
+using System;
+using System.IO;
+
+// 1. Beolvassuk a fájl összes sorát
+string[] sorok = File.ReadAllLines("matrix.txt");
+
+// 2. ADAPTÍV RÉSZ: Automatikusan megmérjük a fájlt
+int sorSzam = sorok.Length;
+int oszlopSzam = sorok[0].Split(',').Length; // Javítva: a legelső sor elemeit számoljuk meg
+
+// 3. Létrehozzuk a megfelelő méretű kétdimenziós mátrixot
+double[,] matrix = new double[sorSzam, oszlopSzam];
+
+// 4. Feltöltjük a mátrixot adatokkal (bármekkora méretnél működik)
+for (int i = 0; i < sorSzam; i++)
+{
+    string[] elemek = sorok[i].Split(',');
+    for (int j = 0; j < oszlopSzam; j++)
+    {
+        // A lebegőpontos számok miatt a pontot (.) kicseréljük vesszőre (,), ha magyar a Windowsod
+        string tisztaElem = elemek[j].Trim().Replace('.', ',');
+        matrix[i, j] = double.Parse(tisztaElem);
+    }
+}
+
+// 5. Kiíratás: dinamikusan alkalmazkodik a mérethez
+Console.WriteLine($"Sikeresen beolvasva egy {sorSzam}x{oszlopSzam}-as mátrix:\n");
+for (int i = 0; i < sorSzam; i++)
+{
+    for (int j = 0; j < oszlopSzam; j++)
+    {
+        // A \t (tabulátor) biztosítja, hogy szépen oszlopokba rendeződjön a kiíratás
+        Console.Write(matrix[i, j] + "\t");
+    }
+    Console.WriteLine(); // Sor végén ugrás a következő sorba
+}
+
+Console.ReadLine();

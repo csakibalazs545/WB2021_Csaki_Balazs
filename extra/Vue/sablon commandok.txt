@@ -1,0 +1,101 @@
+swagger /docs
+
+npm i
+
+npm run dev
+
+router ből töröljük a nem kellendő routeokat
+
+
+
+
+1. letrehozzuk a kelendő vue fájlt
+
+2. routerben atirjuk
+
+import Openpage from "./pages/Openpage.vue";
+
+  {
+        path: "/",
+        name: "Openpage",
+        component: Openpage,
+    },
+
+3. main.js
+
+import Openpage from "./pages/Openpage.vue";
+.component('Openpage', Openpage)
+
+4. adott vue fájlban: 
+
+<template>
+
+template body-n kivul mindent bele
+
+</template>
+
+<script>
+
+</script>
+
+<style scoped>
+
+css fileban mindent
+hatterkep: 
+
+.background
+{
+ background-image: url('../assets/real-estate-agent.png'); miután assets be belehuztad
+}
+
+</style>
+
+nyito oldalon:
+
+GOMB: <router-link class="btn btn-primary" :to="{ name: 'Offers' }">Nézze meg kínálatunkat!</router-link>
+
+
+Lista oldalon:
+
+át irni minden missing dolgot a scriptben, templateben
+
+sablon swagger segít
+
+kép: <td> <img :src="ingatlan.kepUrl" alt="" class="img-fluid kep"></td>
+
+Category oldalon:
+
+scriptet atmasolni
+megnezni mi fog kelleni a data return ful alatt
+
+minden input utan oda irni: v-model="ujingatlanurlap.valami"
+
+es utana a scriptben az data return ujingatlanba mindent belevagni.
+
+
+
+
+
+
+
+
+
+jelenlegi datum
+
+ujingatlanurlap:{
+hirdetesDatuma: new Date().toISOString().substr(0, 10),
+valami: true,
+}
+
+<input type="date" class="form-control" name="hirdetesDatuma" readonly v-model="ujingatlanurlap.hirdetesDatuma">
+                </div>
+
+
+
+
+
+
+
+
+
+

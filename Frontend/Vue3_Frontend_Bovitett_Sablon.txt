@@ -1,0 +1,455 @@
+VUE 3 FRONTEND UTASÍTÁSOK ÉS BŐVÍTETT GYAKORLATI SABLON
+
+Ez a dokumentum lépésről lépésre bemutatja, hogyan építs fel egy komplex Vue 3 projektet a nulláról, beleértve a Bootstrap integrációt, a navigációt, az API adatkezelést, a haladó táblázat-formázást, a képkezelést és a teljes CRUD műveleteket. Minden szakasz ki lett egészítve a szükséges fájlstruktúrákkal, pontos importálási útmutatókkal és magyarázó kód részletekkel.
+
+================================================================================
+[PROJEKT STRUKTÚRA ÁTTEKINTÉS]
+Az alábbiakban látható a javasolt, tiszta mappa- és fájlszerkezet:
+
+Csaki_Balazs_Frontend/
+├── public/
+│   └── kepek/
+│       └── auto.jpg
+├── src/
+│   ├── assets/
+│   │   └── logo.png
+│   ├── components/
+│   │   └── Navbar.vue
+│   ├── pages/
+│   │   ├── Home.vue
+│   │   └── Termekek.vue
+│   ├── App.vue
+│   ├── main.js
+│   └── router.js
+├── index.html
+├── package.json
+└── vite.config.js
+================================================================================
+
+--------------------------------------------------------------------------------
+1. LÉPÉS: A PROJEKT INICIALIZÁLÁSA
+--------------------------------------------------------------------------------
+Nyiss meg egy parancssort abban a mappában, ahová a projektet szeretnéd tenni:
+
+```bash
+npm create vue@latest Csaki_Balazs_Frontend
+```
+(A varázsló kérdéseinél a Routerre nyomj Yes-t, a többire No-t!)
+
+Lépj be a mappába és telepítsd az alapcsomagokat:
+```bash
+cd Csaki_Balazs_Frontend
+npm install
+```
+
+--------------------------------------------------------------------------------
+2. LÉPÉS: VISUÁLIS KIJELZÉS (BOOTSTRAP & AXIOS)
+--------------------------------------------------------------------------------
+Futtaszt a terminálban a dizájn és a szerverhívások csomagjainak telepítését:
+```bash
+npm install --save bootstrap axios vue-router@4
+```
+
+### Hova kell tenni? -> src/main.js
+### Mi legyen a fájlban? (Módosítsd az eredeti tartalmát az alábbira)
+Módosítsd a fájlt, hogy a Bootstrap és a Router globálisan működjön:
+
+```javascript
+import { createApp } from 'vue'
+import App from './App.vue'
+import router from './router.js' // Helyi router importálása
+
+// Bootstrap stílusok és JS komponensek importálása
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap'
+
+const app = createApp(App)
+app.use(router) // A router regisztrálása a Vue példányban
+app.mount('#app')
+```
+
+--------------------------------------------------------------------------------
+3. LÉPÉS: ROUTER KONFIGURÁCIÓ
+--------------------------------------------------------------------------------
+### Hova kell tenni? -> Hozd létre az src/router.js fájlt a gyökér src mappában.
+### Mi legyen a fájlban?
+Ez a fájl felel az oldalak közötti navigációért és az útvonalak (routes) kezeléséért:
+
+```javascript
+import { createRouter, createWebHistory } from "vue-router"
+// Oldal komponensek importálása a routerhez
+import Home from './pages/Home.vue'
+import Termekek from './pages/Termekek.vue'
+
+const routes = [
+    { path: '/', name: 'Home', component: Home },
+    { path: '/termekek', name: 'Termekek', component: Termekek }
+]
+
+const router = createRouter({
+    history: createWebHistory(),
+    routes
+})
+
+export default router
+```
+
+--------------------------------------------------------------------------------
+BŐVÍTMÉNY: A FŐ ALAP-KOMPONENS (src/App.vue)
+--------------------------------------------------------------------------------
+### Hova kell tenni? -> src/App.vue
+### Mi legyen a fájlban?
+Ahhoz, hogy a router által betöltött oldalak és egy globális navigációs sáv megjelenjen, az App.vue-nak így kell kinéznie:
+
+```html
+<template>
+  <div>
+    <!-- Globális Navigációs Sáv (Navbar) -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-4">
+      <div class="container">
+        <router-link class="navbar-brand fw-bold" to="/">Vue3 Sablon</router-link>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <router-link class="nav-link" to="/" active-class="active" exact>Főoldal</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link class="nav-link" to="/termekek" active-class="active">Termékek</router-link>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Ide töltődnek be a router által vezérelt oldalak (Home.vue, Termekek.vue) -->
+    <router-view></router-view>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'App'
+}
+</script>
+```
+
+--------------------------------------------------------------------------------
+BŐVÍTMÉNY: FŐOLDAL SABLON (src/pages/Home.vue)
+--------------------------------------------------------------------------------
+### Hova kell tenni? -> Hozd létre az src/pages/ mappát, azon belül a Home.vue fájlt.
+### Mi legyen a fájlban?
+
+```html
+<template>
+  <div class="container mt-5 text-center">
+    <div class="p-5 mb-4 bg-light rounded-3 border shadow-sm">
+      <h1 class="display-5 fw-bold text-primary">Üdvözöllek a Vue 3 Rendszerben!</h1>
+      <p class="col-md-8 fs-4 mx-auto mt-3 text-muted">
+        Ez egy teljesen előkészített gyakorlati sablon Bootstrap 5-tel, Axios-szal és Vue Routerrel felszerelve.
+      </p>
+      <hr class="my-4">
+      <div class="d-md-flex justify-content-center gap-3">
+        <router-link to="/termekek" class="btn btn-primary btn-lg px-4 gap-3">
+          Termékek kezelése (API & Táblázat)
+        </router-link>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'Home'
+}
+</script>
+```
+
+--------------------------------------------------------------------------------
+4. LÉPÉS: DINAMIKUS ÉS SZÍNEZETT TÁBLÁZATOK KÉSZÍTÉSE
+--------------------------------------------------------------------------------
+Ha a feladatban adatokat kell táblázatosan megjeleníteni, sorkiemelésekkel vagy egyedi színekkel, az alábbi struktúrát használd a .vue fájlod <template> részében. 
+*(Megjegyzés: Ez a kódblokk beépítésre került a 6. lépésben található komplex Termekek.vue fájlba is!)*
+
+```html
+<div class="container mt-4">
+  <h2 class="text-primary mb-3">Termékek listája</h2>
+  
+  <!-- Bootstrap verziójú formázott táblázat -->
+  <table class="table table-striped table-hover table-bordered align-middle">
+    <!-- Táblázat fejléce egyedi háttérszínnel -->
+    <thead class="table-dark text-center">
+      <tr>
+        <th>ID</th>
+        <th>Termék név</th>
+        <th>Kategória</th>
+        <th>Ár (Ft)</th>
+        <th>Státusz</th>
+      </tr>
+    </thead>
+    
+    <!-- Táblázat törzse dinamikus adatokkal feltöltve -->
+    <tbody>
+      <tr v-for="elem in termekek" :key="elem.id" class="text-center">
+        <td>{{ elem.id }}</td>
+        <td class="text-start fw-bold">{{ elem.nev }}</td>
+        <td>{{ elem.kategoria }}</td>
+        
+        <!-- Feltételes betűszínezés: ha drága (>50000), piros, egyébként zöld -->
+        <td :class="elem.ar > 50000 ? 'text-danger fw-bold' : 'text-success'">
+          {{ elem.ar.toLocaleString() }}
+        </td>
+        
+        <!-- Dinamikus Bootstrap háttérszín (Badge) a státusztól függően -->
+        <td>
+          <span :class="['badge', elem.elerheto ? 'bg-success' : 'bg-secondary']">
+            {{ elem.elerheto ? 'Raktáron' : 'Elfogyott' }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+```
+
+--------------------------------------------------------------------------------
+5. LÉPÉS: KÉPEK BESZÚRÁSA ÉS DINAMIKUS BETÖLTÉSE VUE 3-BAN
+--------------------------------------------------------------------------------
+A képek kezelése trükkös, mert külön kell választani a helyi (helyben tárolt) és a távolsági (API-ból jövő) képeket.
+
+### A) Ha a kép egy külső URL (API-ból érkezik a link):
+Ebben az esetben a sima :src attribútum-összekötést (v-bind) kell használni.
+```html
+<!-- Külső szerverről jövő kép megjelenítése -->
+<img :src="adatbázisbólJövőKépUrl" class="img-fluid rounded shadow" alt="Termék képe">
+```
+
+### B) Ha a kép a saját gépeden van (Helyi statikus kép):
+A Vue 3 (Vite) környezetben a helyi képeket a public/ mappába vagy az src/assets/ mappába teheted. 
+* A legegyszerűbb és legbiztosabb módszer a public/ mappa használata. Amit ide raksz, azt közvetlenül eléred a gyökérkönyvtárból.
+
+Ha a képed itt található: public/kepek/auto.jpg, akkor a kódban így hivatkozz rá:
+```html
+<!-- Helyi kép beillesztése a public mappából -->
+<img src="/kepek/auto.jpg" class="card-img-top" alt="Autó">
+```
+
+--------------------------------------------------------------------------------
+6. LÉPÉS: EGY KOMPLEX MEGOLDÁS (TÁBLÁZAT + KÉP + AXIOS + BŐVÍTETT CRUD)
+--------------------------------------------------------------------------------
+### Hova kell tenni? -> Hozd létre az src/pages/ mappában a Termekek.vue fájlt.
+### Mi legyen a fájlban?
+Íme egy teljes, kibővített oldal sablon, ami ötvözi az Axios lekérdezést (GET), az új adat felvételét (POST), a törlést (DELETE), a formázott és színes táblázatot, a public mappás helyi képet, valamint a dinamikus képbetöltést hiba-kezeléssel és töltési képernyővel.
+
+```html
+<template>
+  <div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="text-primary fw-bold">Raktárkészlet Kezelő (CRUD)</h1>
+      <!-- Helyes Vue navigációs link a főoldalra -->
+      <router-link to="/" class="btn btn-outline-secondary">Vissza a Főoldalra</router-link>
+    </div>
+
+    <!-- PÉLDA HELYI STATIKUS KÉP HASZNÁLATÁRA (public/kepek/auto.jpg) -->
+    <div class="card mb-4 p-3 bg-light text-center">
+      <h5>Helyi statikus kép teszt (public mappa):</h5>
+      <img src="/kepek/auto.jpg" class="mx-auto rounded border" style="max-width: 150px; height: auto;" alt="Autó statikus teszt">
+    </div>
+
+    <!-- ÚJ TERMÉK HOZZÁADÁSA FORM -->
+    <div class="card shadow-sm mb-5">
+      <div class="card-header bg-success text-white">
+        <h5 class="mb-0">Új termék hozzáadása</h5>
+      </div>
+      <div class="card-body">
+        <form @submit.prevent="termekHozzaadas">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label fw-bold">Termék neve</label>
+              <input type="text" class="form-control" v-model="ujTermek.nev" placeholder="Pl. Vezeték nélküli egér" required>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label fw-bold">Kód</label>
+              <input type="text" class="form-control" v-model="ujTermek.kod" placeholder="Pl. MOUSE-01" required>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label fw-bold">Kategória</label>
+              <input type="text" class="form-control" v-model="ujTermek.kategoria" placeholder="Pl. Periféria" required>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label fw-bold">Ár (Ft)</label>
+              <input type="number" class="form-control" v-model.number="ujTermek.ar" min="0" required>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+              <div class="form-check mb-2">
+                <input class="form-check-input" type="checkbox" id="elerhetoCheck" v-model="ujTermek.elerheto">
+                <label class="form-check-label fw-bold" for="elerhetoCheck">Raktáron</label>
+              </div>
+            </div>
+            <div class="col-12 text-end">
+              <button type="submit" class="btn btn-success px-4">Mentés</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- TÖLTÉSI KÉPERNYŐ -->
+    <div v-if="loading" class="text-center my-5">
+      <div class="spinner-border text-primary" role="status"></div>
+      <p class="mt-2 text-muted">Adatok szinkronizálása folyamatban...</p>
+    </div>
+
+    <!-- ERROR ÜZENET -->
+    <div v-if="errorMessage" class="alert alert-danger shadow-sm text-center" role="alert">
+      {{ errorMessage }}
+      <button type="button" class="btn-close float-end" @click="errorMessage = ''"></button>
+    </div>
+
+    <!-- KIBŐVÍTETT ADATTÁBLÁZAT -->
+    <div v-if="!loading" class="card shadow">
+      <div class="card-body p-0">
+        <table class="table table-striped table-hover align-middle mb-0">
+          <thead class="table-dark text-center">
+            <tr>
+              <th class="ps-3">Fotó</th>
+              <th>ID</th>
+              <th>Megnevezés</th>
+              <th>Kategória</th>
+              <th>Ár</th>
+              <th>Státusz</th>
+              <th>Műveletek</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="t in termekek" :key="t.id" class="text-center">
+              <!-- Dinamikus képbetöltés fallback-kel -->
+              <td class="ps-3">
+                <img :src="t.kepUrl || 'https://via.placeholder.com/50'" 
+                     class="rounded-circle border" 
+                     style="width: 50px; height: 50px; object-fit: cover;" 
+                     alt="Termék fotó">
+              </td>
+              <td>{{ t.id }}</td>
+              <td class="text-start fw-bold">
+                <h6 class="mb-0 fw-bold text-dark">{{ t.nev }}</h6>
+                <small class="text-muted">{{ t.kod }}</small>
+              </td>
+              <td>{{ t.kategoria || 'Nincs megadva' }}</td>
+              <!-- Feltételes betűszínezés az ár alapján -->
+              <td :class="t.ar > 50000 ? 'text-danger fw-bold' : 'text-success fw-bold'">
+                {{ Number(t.ar).toLocaleString() }} Ft
+              </td>
+              <!-- Dinamikus Bootstrap Badge státusztól függően -->
+              <td>
+                <span :class="['badge', t.elerheto ? 'bg-success' : 'bg-secondary']">
+                  {{ t.elerheto ? 'Raktáron' : 'Elfogyott' }}
+                </span>
+              </td>
+              <!-- Interaktív művelet gombok -->
+              <td>
+                <div class="btn-group gap-2">
+                  <button class="btn btn-sm btn-info text-white rounded shadow-sm" @click="megtekint(t)">
+                    Részletek
+                  </button>
+                  <button class="btn btn-sm btn-danger rounded shadow-sm" @click="termekTorles(t.id)">
+                    Törlés
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <!-- Ha nincs adat a listában -->
+            <tr v-if="termekek.length === 0">
+              <td colspan="7" class="text-center text-muted py-4">Nincs elérhető termék a listában.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+
+// Az API alapértelmezett URL címe (Egységesített kezelés végett kiszervezve)
+const API_URL = 'http://localhost:3000/api/termekek';
+
+export default {
+  name: 'Termekek',
+  data() {
+    return {
+      termekek: [],
+      loading: true,
+      errorMessage: '',
+      // Új termék űrlap alapértelmezett modellje
+      ujTermek: {
+        nev: '',
+        kod: '',
+        kategoria: '',
+        ar: 0,
+        elerheto: true,
+        kepUrl: ''
+      }
+    }
+  },
+  mounted() {
+    this.adatokBetoltese();
+  },
+  methods: {
+    // GET: Adatok lekérése a szerverről
+    adatokBetoltese() {
+      this.loading = true;
+      this.errorMessage = '';
+      axios.get(API_URL)
+        .then(res => {
+          this.termekek = res.data;
+          this.loading = false;
+        })
+        .catch(err => {
+          console.error("Hiba az adatok letöltésekor:", err);
+          this.errorMessage = "Nem sikerült kapcsolódni a backend szerverhez. Ellenőrizd a futását!";
+          this.loading = false;
+        });
+    },
+    // POST: Új rekord beküldése a backendnek
+    termekHozzaadas() {
+      this.errorMessage = '';
+      axios.post(API_URL, this.ujTermek)
+        .then(res => {
+          // Ha sikeres a mentés, frissítjük a helyi listát és alaphelyzetbe állítjuk a formot
+          this.adatokBetoltese();
+          this.ujTermek = { nev: '', kod: '', kategoria: '', ar: 0, elerheto: true, kepUrl: '' };
+          alert("Termék sikeresen hozzáadva!");
+        })
+        .catch(err => {
+          console.error("Hiba a hozzáadás során:", err);
+          this.errorMessage = "Hiba történt a termék mentése közben.";
+        });
+    },
+    // DELETE: Elem eltávolítása ID alapján
+    termekTorles(id) {
+      if (confirm("Biztosan törölni szeretnéd ezt a terméket?")) {
+        this.errorMessage = '';
+        axios.delete(`${API_URL}/${id}`)
+          .then(() => {
+            this.adatokBetoltese();
+            alert("Termék sikeresen törölve!");
+          })
+          .catch(err => {
+            console.error("Hiba a törlés során:", err);
+            this.errorMessage = "Nem sikerült törölni a kijelölt terméket.";
+          });
+      }
+    },
+    // Részletek gomb eseménykezelője
+    megtekint(termek) {
+      alert(`Termék részletei:\nNév: ${termek.nev}\nKód: ${termek.kod}\nÁr: ${termek.ar} Ft\nStátusz: ${termek.elerheto ? 'Raktáron' : 'Elfogyott'}`);
+    }
+  }
+}
+</script>
+```
+================================================================================

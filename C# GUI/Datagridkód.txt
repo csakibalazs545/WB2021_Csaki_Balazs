@@ -1,0 +1,70 @@
+csharp
+using System.IO;
+using System.Data;
+Körültekintően használja a kódot.
+
+2. A beolvasást végző kód
+
+Formra egy Button-t (gombot) és DataGridView-t. 
+
+private void btnBeolvas_Click(object sender, EventArgs e)
+{
+    // 1. Megnyitunk egy fájlválasztó ablakot (OpenFileDialog)
+    OpenFileDialog openFileDialog = new OpenFileDialog();
+    openFileDialog.Filter = "CSV fájlok (*.csv)|*.csv|Szöveges fájlok (*.txt)|*.txt|Minden fájl (*.*)|*.*";
+
+    if (openFileDialog.ShowDialog() == DialogResult.OK)
+    {
+        string fajlUtvonal = openFileDialog.FileName;
+        
+        // 2. Létrehozunk egy üres adattáblát
+        DataTable dt = new DataTable();
+
+        try
+        {
+            // 3. Beolvassuk a fájl összes sorát
+            string[] sorok = File.ReadAllLines(fajlUtvonal);
+
+            if (sorok.Length > 0)
+            {
+                // Feltételezzük, hogy az első sor tartalmazza a fejlécet (oszlopneveket)
+                // A 'sorok[0].Split(',')' osztja fel a szöveget a vesszők mentén
+                string[] fejlecOszlopok = sorok[0].Split(',');
+                foreach (string oszlopNev in fejlecOszlopok)
+                {
+                    dt.Columns.Add(oszlopNev.Trim());
+                }
+
+                // 4. A többi sor (az adatok) beolvasása és hozzáadása a táblához
+                for (int i = 1; i < sorok.Length; i++)
+                {
+                    // Ha üres a sor, kihagyjuk
+                    if (string.IsNullOrWhiteSpace(sorok[i])) continue; 
+
+                    string[] adatCellak = sorok[i].Split(',');
+                    
+                    // Ellenőrizzük, hogy a sorban ugyanannyi elem van-e, mint a fejlécben
+                    if (adatCellak.Length == fejlecOszlopok.Length)
+                    {
+                        dt.Rows.Add(adatCellak);
+                    }
+                }
+
+                // 5. A DataGridView összekötése az elkészült adattáblával
+                dataGridView1.DataSource = dt;
+                
+                MessageBox.Show("A fájl sikeresen betöltve!", "Siker", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Hiba történt a fájl beolvasása közben: {ex.Message}", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+    }
+}
+Körültekintően használja a kódot.
+
+Mire érdemes figyelni?
+
+• Elválasztó karakter (Delimiter): A fenti kód vesszőt (',') használ elválasztóként. Ha az Ön CSV vagy TXT fájlja pontosvesszőt (';') vagy tabulátort ('\t') használ, egyszerűen cserélje le a .Split(',') részt a megfelelő karakterre (például .Split(';')).
+• Fejléc nélküli fájlok: Ha a fájl első sora nem a fejléc, hanem azonnal az adat, akkor a dt.Columns.Add() résznél generáljon tetszőleges neveket (pl. Oszlop1, Oszlop2), a for ciklust pedig a 0. indextől indítsa (int i = 0) az 1. helyett.

@@ -1,0 +1,7 @@
+C:\Users\nemit\source\repos\Turatar\Turatar\bin\Debug\Turatar.exe.config
+C:\Users\nemit\source\repos\Turatar\Turatar\bin\Debug\Turatar.exe
+C:\Users\nemit\source\repos\Turatar\Turatar\bin\Debug\Turatar.pdb
+C:\Users\nemit\source\repos\Turatar\Turatar\obj\Debug\Turatar.csproj.AssemblyReference.cache
+C:\Users\nemit\source\repos\Turatar\Turatar\obj\Debug\Turatar.csproj.CoreCompileInputs.cache
+C:\Users\nemit\source\repos\Turatar\Turatar\obj\Debug\Turatar.exe
+C:\Users\nemit\source\repos\Turatar\Turatar\obj\Debug\Turatar.pdb

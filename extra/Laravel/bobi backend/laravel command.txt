@@ -1,0 +1,265 @@
+https://youtu.be/Ulv3NfmXUyo?is=k--1hv6cUEnxTIn4
+
+create laravel:
+
+0. 
+
+composer create-project laravel/laravel Boban_Petrik_Jozsef_backend
+cd Boban_Petrik_Jozsef_backend
+code .
+
+
+1. .env file (mindig szerkeszteni kell telepites utan)
+
+{
+	DB_CONNECTION=mysql
+ 	DB_HOST=127.0.0.1
+ 	DB_PORT=3306
+ 	DB_DATABASE=(feladat)
+ 	DB_USERNAME=root
+ 	DB_PASSWORD=mysql
+}
+
+2. sanctum törlés 
+composer remove laravel/sanctum
+
+3. tábla létrehozás (nagy betu egyes szam utana rename)
+{
+
+kapcsolok
+(
+	m létrehoz migracio
+	c létrehoz controller
+	--api crud muveletek fuggvenyek 
+)
+
+
+
+php artisan make:model -m Kategoria 
+php artisan make:model -mc --api Ingatlan
+	
+egyedi = unique()
+kihagyható = nullable()
+foreign kulcs = 
+
+4. migration: (atjavitani a nevuket)
+{
+
+$table->foreignId('kategoria')->references('id')->on('kategoriak');
+
+$table->foreignId('masik tabla model')->references('kapcsolo tabla pl:id')->on('masik tabla migrations')
+
+$table->date('hirdetesDatuma')->nullable()->useCurrent();
+
+$table->boolean('');
+$table->integer('');
+$table->string('');
+$table->id();
+
+}
+
+5. Models:
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+ 
+ use HasFactory;
+    public $table = 'kategoriak';
+    public $timestamps = false;
+
+
+ingatlan végére:
+	
+	public $guarded = [];
+
+	public function kategoria()
+    {
+        return $this->belongsTo(Kategoria::class, 'kategoria');
+    }
+
+
+
+
+
+}
+
+seeder:
+
+models-ben át kell irni ha nem hasznalunk alap modelst. app/models
+
+use App\Models\Kategoria;
+
+$kategoriak = ['Ház', 'Lakás', 'Építési telek', 'Garázs', 'Mezőgazdasági terület', 'Ipari ingatlan'];
+        foreach ($kategoriak as $key => $value) 
+            {
+            Kategoria::create([
+                'nev' => $value
+            ]);
+        }
+
+
+
+api modul telepitese:
+
+ php artisan install:api
+
+
+migracio futtatása:
+
+ phpmyadminban csinálni adatbazist
+
+ php artisan migrate --seed 
+
+
+GET: (controllerben)
+
+return Ingatlan::with('kategoria')->get();
+
+ha csak önmagát hivja meg: 
+
+return Ingatlan::all();
+
+
+Route::get('/ingatlan', [\App\Http\Controllers\IngatlanController::class, 'index']);
+
+SHOW:
+
+public function show($id)
+    {
+        $game = Game::find($id);
+
+        if (!$game)
+        {
+            return response()->json([
+                'message' => 'Game not found'
+            ], 404);
+        }
+        return response()->json($game, 200);
+    }
+
+
+Route::get('/games/{id}', [\App\Http\Controllers\GameController::class, 'show']);
+
+
+STORE: 
+use Illuminate\Support\Facades\Validator;
+
+ {
+        $validator = Validator::make($request->all(), [
+            'kategoria' => 'required',
+            'ar' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Hiányos adatok'], 400);
+        }
+        $ingatlan = Ingatlan::create($request->all());
+        return response()->json(['id' => $ingatlan->id], 201);
+    }
+
+Route::post('/ingatlan', [\App\Http\Controllers\IngatlanController::class, 'store']);
+
+DESTROY:
+
+public function destroy($id)
+    {
+        // Megkeressük a terméket az URL-ben kapott ID alapján
+        $ingatlan = Ingatlan::where('id', '=', $id);
+        // Ha létezik a termék...
+        if ($ingatlan->exists()) 
+        {
+            $ingatlan->delete(); // ...akkor letöröljük
+            return response('', 204); // és visszaadjuk a 204-es kódot (No Content)
+        }
+        // Ha az if nem futott le, mert nincs ilyen ID, akkor 404-es hibát dobunk a kért szöveggel
+        return response('Az ingatlan nem létezik.', 404);
+    } 
+
+Route::delete('/ingatlan/{id}', [\App\Http\Controllers\IngatlanController::class, 'destroy']);
+
+PATCH:
+
+public function update(Request $request, $id)
+{
+    // 1. VALIDÁCIÓ: A kért kötelező (required) mezők ellenőrzése
+    $validator = Validator::make($request->all(), [
+        'kategoria' => 'required', // A kategóriát muszáj elküldeni
+        'ar' => 'required',        // Az árat muszáj elküldeni
+    ]);
+
+    // 2. HA HIÁNYZIK VALAMELYIK KÖTELEZŐ:
+    if ($validator->fails()) {
+        return response()->json("Hiányos adatok.", 400);
+    }
+
+    // 3. INGATLAN KERESÉSE AZ ADATBÁZISBAN
+    $ingatlan = Ingatlan::find($id);
+
+    // 4. HA NINCS ILYEN ID:
+    if (!$ingatlan) {
+        return response()->json("Az ingatlan nem létezik.", 404);
+    }
+
+    // 5. FRISSÍTÉS
+    // (A $request->all() az összes elküldött mezőt frissíti, nem csak a kategóriát és az árat)
+    $ingatlan->update($request->all());
+
+    // 6. VÁLASZ (Sikeres frissítés)
+    return response('', 204); 
+}
+
+Route::patch('/ingatlan/{id}', [\App\Http\Controllers\IngatlanController::class, 'update']);
+
+postman tesztelés:
+
+
+(bootstrap app.php-ba bele kell irni az api.php route-ot api: __DIR__.'/../routes/api.php',  )
+
+új kollekció létrehozása
+add request 
+api route utvonal (php artisan serve)
+
+GET
+
+http://127.0.0.1:8000/api/ingatlan
+
+POST
+
+headers
+
+accept application/json
+content-type application/json
+
+body raw json
+
+{
+ "_id": 99,
+ "kategoria": 2,
+ "leiras": "Eladó ...",
+ "hirdetesDatuma": "2022-03-19",
+ "tehermentes": true,
+ "ar": 45000000,
+ "kepUrl": "https://pictures.com/apartman.jpg"
+}
+
+DELETE: http://127.0.0.1:8000/api/ingatlan/7
+
+PATCH:
+
+headers
+
+accept application/json
+content-type application/json
+
+body raw json
+
+{
+    "kategoria": 1,
+    "ar": 3500,
+    "leiras": "Frissen felújított, azonnal költözhető."
+}
+
+
+beadás előtt:
+vendor delete
+
+
+visszaállítani:
+composer i                  

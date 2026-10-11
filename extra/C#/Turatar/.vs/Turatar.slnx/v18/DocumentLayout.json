@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\User\\Documents\\GitHub\\WB2021_NagyLevedSamuel\\C#\\Turatar\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{6EF32C97-632F-419E-A50B-2DA9E7C2B505}|Turatar\\Turatar.csproj|c:\\users\\user\\documents\\github\\wb2021_nagylevedsamuel\\c#\\turatar\\turatar\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6EF32C97-632F-419E-A50B-2DA9E7C2B505}|Turatar\\Turatar.csproj|solutionrelative:turatar\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Documents\\GitHub\\WB2021_NagyLevedSamuel\\C#\\Turatar\\Turatar\\Program.cs",
+              "RelativeDocumentMoniker": "Turatar\\Program.cs",
+              "ToolTip": "C:\\Users\\User\\Documents\\GitHub\\WB2021_NagyLevedSamuel\\C#\\Turatar\\Turatar\\Program.cs",
+              "RelativeToolTip": "Turatar\\Program.cs",
+              "ViewState": "AgIAAIEAAAAAAAAAAAAIwJwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-15T07:18:17.652Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

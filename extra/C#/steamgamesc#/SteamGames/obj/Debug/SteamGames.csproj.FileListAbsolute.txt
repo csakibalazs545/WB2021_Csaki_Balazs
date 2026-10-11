@@ -1,0 +1,7 @@
+C:\Users\boban\Desktop\gyakorlofeladatsor gpt\c#\SteamGames\bin\Debug\SteamGames.exe.config
+C:\Users\boban\Desktop\gyakorlofeladatsor gpt\c#\SteamGames\bin\Debug\SteamGames.exe
+C:\Users\boban\Desktop\gyakorlofeladatsor gpt\c#\SteamGames\bin\Debug\SteamGames.pdb
+C:\Users\boban\Desktop\gyakorlofeladatsor gpt\c#\SteamGames\obj\Debug\SteamGames.csproj.AssemblyReference.cache
+C:\Users\boban\Desktop\gyakorlofeladatsor gpt\c#\SteamGames\obj\Debug\SteamGames.csproj.CoreCompileInputs.cache
+C:\Users\boban\Desktop\gyakorlofeladatsor gpt\c#\SteamGames\obj\Debug\SteamGames.exe
+C:\Users\boban\Desktop\gyakorlofeladatsor gpt\c#\SteamGames\obj\Debug\SteamGames.pdb

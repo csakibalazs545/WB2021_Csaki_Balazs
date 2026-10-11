@@ -1,0 +1,224 @@
+VUE 3 FRONTEND UTASÍTÁSOK ÉS GYAKORLATI SABLON
+
+Ez a dokumentum lépésről lépésre bemutatja, hogyan építs fel egy komplex Vue 3 projektet a nulláról, beleértve a Bootstrap integrációt, a navigációt, az API adatkezelést, a haladó táblázat-formázást és a képkezelést.
+
+---
+
+## 1. LÉPÉS: A PROJEKT INICIALIZÁLÁSA
+Nyiss meg egy parancssort abban a mappában, ahová a projektet szeretnéd tenni:
+
+```bash
+npm create vue@latest Csaki_Balazs_Frontend
+```
+(A varázsló kérdéseinél a Routerre nyomj Yes-t, a többire No-t!)
+
+Lépj be a mappába és telepítsd az alapcsomagokat:
+```bash
+cd Csaki_Balazs_Frontend
+npm install
+```
+
+---
+
+## 2. LÉPÉS: VISUÁLIS KIJELZÉS (BOOTSTRAP & AXIOS)
+Futtasd a terminálban a dizájn és a szerverhívások csomagjainak telepítését:
+```bash
+npm install --save bootstrap axios vue-router@4
+```
+
+### src/main.js beállítása:
+Módosítsd a fájlt, hogy a Bootstrap és a Router globálisan működjön:
+```javascript
+import { createApp } from 'vue'
+import App from './App.vue'
+import router from './router.js'
+
+// Bootstrap stílusok és JS komponensek importálása
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap'
+
+const app = createApp(App)
+app.use(router)
+app.mount('#app')
+```
+
+---
+
+## 3. LÉPÉS: ROUTER KONFIGURÁCIÓ (src/router.js)
+Hozd létre az src/router.js fájlt az oldalak közötti navigációhoz:
+```javascript
+import { createRouter, createWebHistory } from "vue-router"
+import Home from './pages/Home.vue'
+import Termekek from './pages/Termekek.vue'
+
+const routes = [
+    { path: '/', name: 'Home', component: Home },
+    { path: '/termekek', name: 'Termekek', component: Termekek }
+]
+
+const router = createRouter({
+    history: createWebHistory(),
+    routes
+})
+
+export default router
+```
+
+---
+
+## 4. LÉPÉS: DINAMIKUS ÉS SZÍNEZETT TÁBLÁZATOK KÉSZÍTÉSE
+Ha a feladatban adatokat kell táblázatosan megjeleníteni, sorkiemelésekkel vagy egyedi színekkel, az alábbi struktúrát használd a .vue fájlod <template> részében:
+
+```html
+<div class="container mt-4">
+  <h2 class="text-primary mb-3">Termékek listája</h2>
+  
+  <!-- Bootstrap verziójú formázott táblázat -->
+  <table class="table table-striped table-hover table-bordered align-middle">
+    <!-- Táblázat fejléce egyedi háttérszínnel -->
+    <thead class="table-dark text-center">
+      <tr>
+        <th>ID</th>
+        <th>Termék név</th>
+        <th>Kategória</th>
+        <th>Ár (Ft)</th>
+        <th>Státusz</th>
+      </tr>
+    </thead>
+    
+    <!-- Táblázat törzse dinamikus adatokkal feltöltve -->
+    <tbody>
+      <tr v-for="elem in termekek" :key="elem.id" class="text-center">
+        <td>{{ elem.id }}</td>
+        <td class="text-start fw-bold">{{ elem.nev }}</td>
+        <td>{{ elem.kategoria }}</td>
+        
+        <!-- Feltételes betűszínezés: ha drága, piros, egyébként zöld -->
+        <td :class="elem.ar > 50000 ? 'text-danger fw-bold' : 'text-success'">
+          {{ elem.ar.toLocaleString() }}
+        </td>
+        
+        <!-- Dinamikus Bootstrap háttérszín (Badge) a státusztól függően -->
+        <td>
+          <span :class="['badge', elem.elerheto ? 'bg-success' : 'bg-secondary']">
+            {{ elem.elerheto ? 'Raktáron' : 'Elfogyott' }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+```
+
+---
+
+## 5. LÉPÉS: KÉPEK BESZÚRÁSA ÉS DINAMIKUS BETÖLTÉSE VUE 3-BAN
+A képek kezelése trükkös, mert külön kell választani a helyi (helyben tárolt) és a távolsági (API-ból jövő) képeket.
+
+### A) Ha a kép egy külső URL (API-ból érkezik a link):
+Ebben az esetben a sima :src attribútum-összekötést (v-bind) kell használni.
+```html
+<!-- Külső szerverről jövő kép megjelenítése -->
+<img :src="adatbázisbólJövőKépUrl" class="img-fluid rounded shadow" alt="Termék képe">
+```
+
+### B) Ha a kép a saját gépeden van (Helyi statikus kép):
+A Vue 3 (Vite) környezetben a helyi képeket a public/ mappába vagy az src/assets/ mappába teheted. 
+* A legegyszerűb és legbiztosabb módszer a public/ mappa használata. Amit ide raksz, azt közvetlenül eléred a gyökérkönyvtárból.
+
+Ha a képed itt található: public/kepek/auto.jpg, akkor a kódban így hivatkozz rá:
+```html
+<!-- Helyi kép beillesztése a public mappából -->
+<img src="/kepek/auto.jpg" class="card-img-top" alt="Autó">
+```
+
+---
+
+## 6. LÉPÉS: EGY KOMPLEX MEGOLDÁS (TÁBLÁZAT + KÉP + AXIOS)
+Íme egy teljes oldal sablon (src/pages/Termekek.vue), ami ötvözi az Axios adatlekérést, a színes táblázatot és a dinamikus képbetöltést:
+
+```html
+<template>
+  <div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1>Raktárkészlet Kezelő</h1>
+      <!-- Helyes Vue navigációs link a főoldalra -->
+      <router-link to="/" class="btn btn-outline-secondary">Vissza a Főoldalra</router-link>
+    </div>
+
+    <!-- Töltési képernyő -->
+    <div v-if="loading" class="text-center my-5">
+      <div class="spinner-border text-primary" role="status"></div>
+      <p class="mt-2">Adatok szinkronizálása folyamatban...</p>
+    </div>
+
+    <!-- Adattáblázat -->
+    <div v-else class="card shadow">
+      <div class="card-body p-0">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-primary">
+            <tr>
+              <th class="ps-3">Fotó</th>
+              <th>Megnevezés</th>
+              <th>Ár</th>
+              <th class="text-center">Művelet</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="t in termekek" :key="t.id">
+              <!-- Dinamikus képbetöltés: ha nincs kép, egy alapértelmezettet adunk meg -->
+              <td class="ps-3">
+                <img :src="t.kepUrl || 'https://via.placeholder.com/50'" 
+                     class="rounded-circle border" 
+                     style="width: 50px; height: 50px; object-fit: cover;" 
+                     alt="Termék fotó">
+              </td>
+              <td>
+                <h6 class="mb-0">{{ t.nev }}</h6>
+                <small class="text-muted">{{ t.kod }}</small>
+              </td>
+              <td class="fw-bold">{{ t.ar }} Ft</td>
+              <td class="text-center">
+                <button class="btn btn-sm btn-info text-white" @click="megtekint(t.id)">
+                  Részletek
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+
+export default {
+  name: 'Termekek',
+  data() {
+    return {
+      termekek: [],
+      loading: true
+    }
+  },
+  mounted() {
+    // API hívás végrehajtása
+    axios.get('http://localhost:3000/api/termekek')
+      .then(res => {
+        this.termekek = res.data;
+        this.loading = false;
+      })
+      .catch(err => {
+        console.error("Hiba az adatok letöltésekor:", err);
+        this.loading = false;
+      });
+  },
+  methods: {
+    megtekint(id) {
+      alert("Kiválasztott termék azonosítója: " + id);
+    }
+  }
+}
+</script>
+```

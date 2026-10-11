@@ -1,0 +1,141 @@
+ 
+ATLAG
+static double atlag(List<ad> lista)
+ {
+     int db = 0;
+     int ossz = 0;
+     foreach (var ad in lista)
+     {
+         if (ad.floors == 0)
+         {
+             db++;
+             ossz += ad.area;
+         }
+     }
+     return (double)ossz / db;
+ }
+
+PITAGORASZ
+
+public double Distanceto(double lat, double lon)
+{
+    string[] koordinata =
+        LatLong.Split(',');
+
+    double sajatlat = double.Parse(koordinata[0]);
+    double sajatlon = double.Parse(koordinata[1]);
+    double kulonbsegX = sajatlat - lat;
+    double kulonbsegY = sajatlon - lon;
+    double tavolsag = Math.Sqrt(kulonbsegX *  kulonbsegX * kulonbsegY * kulonbsegY);
+
+    return tavolsag;
+}
+
+THALESZ
+
+public double Thalesz(double a, double b)
+{
+    double c =
+        Math.Sqrt(
+            a * a +
+            b * b);
+
+    return c;
+}
+
+KOR TERULET
+
+public double KorTerulet(double r)
+{
+    return Math.PI * r * r;
+}
+
+KOR KERULET
+
+public double KorKerulet(double r)
+{
+    return 2 * Math.PI * r;
+}
+
+HAROMSZOG TERULET
+
+public double HaromszogTerulet(double a, double m)
+{
+    return (a * m) / 2;
+}
+
+TEGLALAP TERÜLET 
+
+public double TeglalapTerulet(double a, double b)
+{
+    return a * b;
+}
+
+MASODFOKU EGYENLET
+
+public double Diszkriminans(double a, double b, double c)
+{
+    return b * b - 4 * a * c;
+}
+
+GYOK
+
+public double X1(double a, double b, double c)
+{
+    double d = b * b - 4 * a * c;
+
+    return (-b + Math.Sqrt(d)) / (2 * a);
+}
+
+KOR SUGAR ATMEROBOL
+
+public double Sugar(double atmero)
+{
+    return atmero / 2;
+}
+
+KOR ATMERO SUGARBOL
+
+public double Atmero(double r)
+{
+    return 2 * r;
+}
+
+HENGER TERFOGAT
+
+public double HengerTerfogat(double r, double m)
+{
+    return Math.PI * r * r * m;
+}
+
+GOMB TERFOGAT
+
+public double GombTerfogat(double r)
+{
+    return (4.0 / 3.0) * Math.PI * r * r * r;
+}
+
+KET PONT KOZOTTI MEREDEKSEG
+
+public double Meredekseg(double x1, double y1,
+                         double x2, double y2)
+{
+    return (y2 - y1) / (x2 - x1);
+}
+
+KOZEPPONT KET PONT KOZOTT
+
+public double[] Kozeppont(double x1, double y1,
+                          double x2, double y2)
+{
+    double x = (x1 + x2) / 2;
+    double y = (y1 + y2) / 2;
+
+    return new double[] { x, y };
+}
+
+SZOGFUGGVENYEK
+
+double szinusz = Math.Sin(szog);
+double koszinusz = Math.Cos(szog);
+double tangens = Math.Tan(szog);

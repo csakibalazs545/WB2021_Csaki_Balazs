@@ -1,0 +1,154 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+
+namespace SteamGames
+{
+
+    class Game
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+        public string genre { get; set; }
+        public double price { get; set; }
+        public double owners { get; set; }
+        public int positive_reviews { get; set; }
+        public int release_year { get; set; }
+
+
+        public Game(string sor)
+        {
+            string[] adatok = sor.Split(';');
+            this.id = int.Parse(adatok[0]);
+            this.name = adatok[1];
+            this.genre = adatok[2];
+            this.price = double.Parse(adatok[3]);
+            this.owners = double.Parse(adatok[4]);
+            this.positive_reviews = int.Parse(adatok[5]);
+            this.release_year = int.Parse(adatok[6]);
+        }
+    }
+
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            var betolt = LoadfromCsv("games.csv");
+
+            Console.WriteLine("1. feladat");
+
+            Console.WriteLine($"Átlag ár: {atlag(betolt):F2}");
+            Console.WriteLine($"Átlag ár: {betolt.Count}");
+
+
+            Game top = legtobb(betolt);
+
+            Console.WriteLine($"Legnépszerűbb játék: {top.name}");
+            Console.WriteLine($"Tulajdonosok száma: {top.owners}");
+
+            Console.WriteLine($"RPG játékok száma: {rpgdb(betolt)}");
+
+
+            topjatekok(betolt);
+
+            statisztika(betolt);
+        }
+
+
+        static List<Game> LoadfromCsv(string filename)
+        {
+            List<Game> lista = new List<Game>();
+            var sorok = File.ReadAllLines(filename);
+
+            foreach (var sor in sorok.Skip(1))
+            {
+                lista.Add(new Game(sor));
+            }
+            return lista;
+        }
+
+        static double atlag(List<Game> lista)
+        {
+            int db = 0;
+            double ossz = 0;
+            foreach (var game in lista)
+            {
+
+                db++;
+                ossz += game.price;
+
+            }
+            return (double)ossz / db;
+        }
+
+        static Game legtobb(List<Game> lista)
+        {
+            Game legtobb = lista[0];
+
+            foreach (var game in lista)
+            {
+                if (game.owners > legtobb.owners)
+                {
+                    legtobb = game;
+                }
+            }
+
+            return legtobb;
+        }
+
+        static int rpgdb(List<Game> lista)
+        {
+            int db = 0;
+
+            foreach (var game in lista)
+            {
+                if (game.genre == "RPG")
+                {
+                    db++;
+                }
+            }
+
+            return db;
+        }
+
+
+        static void statisztika(List<Game> lista)
+        {
+            Dictionary<string, int> stat = new Dictionary<string, int>();
+
+            foreach (var game in lista)
+            {
+                if (stat.ContainsKey(game.genre))
+                {
+                    stat[game.genre]++;
+                }
+                else
+                {
+                    stat.Add(game.genre, 1);
+                }
+            }
+
+            foreach (var item in stat)
+            {
+                Console.WriteLine($"{item.Key} - {item.Value} db");
+            }
+
+        }
+
+
+        static void topjatekok(List<Game> lista)
+        {
+            foreach (var game in lista)
+            {
+                if (game.release_year > 2020 &&
+                    game.positive_reviews >= 90)
+                {
+                    Console.WriteLine(game.name);
+                }
+            }
+        }
+    }
+}

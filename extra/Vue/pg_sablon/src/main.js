@@ -1,0 +1,15 @@
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap'
+
+import axios from 'axios'
+import router from './router'
+
+import './assets/style.css'
+
+import { createApp } from 'vue'
+import App from './App.vue'
+
+createApp(App)
+    .use(router)
+    .use(axios)
+    .mount('#app')
